@@ -60,10 +60,9 @@ class PelangganController extends Controller
     {
         $pelanggan = Pelanggan::findOrFail($id);
         return view('pelanggans.edit', compact('pelanggan'));
-    }
-    {
-        //
-    }
+     }
+
+
 
     /**
      * Update the specified resource in storage.
