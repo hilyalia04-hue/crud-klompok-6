@@ -21,7 +21,7 @@ class PelangganController extends Controller
      */
     public function create()
     {
-        //
+        return view('pelanggans.create');
     }
 
     /**
@@ -29,7 +29,20 @@ class PelangganController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'kode_pelanggan' => 'required|unique:pelanggans,kode_pelanggan',
+            'nama' => 'required',
+            'kategori' => 'required',
+            'email' => 'required|email|unique:pelanggans,email',
+            'tanggal_daftar' => 'required|date',
+            'alamat' => 'required',
+            'keterangan' => 'nullable',
+        ]);
+
+        Pelanggan::create($request->all());
+
+        return redirect()->route('pelanggans.index')
+                         ->with('success', 'Pelanggan created successfully.');
     }
 
     /**
@@ -43,7 +56,11 @@ class PelangganController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
+    {
+        $pelanggan = Pelanggan::findOrFail($id);
+        return view('pelanggans.edit', compact('pelanggan'));
+    }
     {
         //
     }
@@ -53,7 +70,18 @@ class PelangganController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $pelanggan = Pelanggan::findOrFail($id);
+        $request->validate([
+            'kode_pelanggan' => 'required|unique:pelanggans,kode_pelanggan,' . $pelanggan->id,
+            'nama' => 'required',
+            'kategori' => 'required',
+            'email' => 'required|email|unique:pelanggans,email,' . $pelanggan->id,
+            'tanggal_daftar' => 'required|date',
+            'alamat' => 'required',
+            'keterangan' => 'nullable',
+        ]);
+        $pelanggan->update($request->all());
+        return redirect()->route('pelanggans.index');
     }
 
     /**
